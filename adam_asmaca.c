@@ -64,25 +64,44 @@ void yazdir_kutu(char yanlis_sayisi){
 int main()
 {
     bool game_finish = 0,win_rate = -1;
+    int tahmin_edilen_kelime_sayisi = 0;
+    char tahmin_edilen_kelimeler[30];
     char kelimeler[KELIME_SAYISI][25] = {"elma","kalem","elektrik","telefon"},girdi,yanlis_sayisi = 0;
     char *secilen_kelime = kelimeler[rand_sayi() % KELIME_SAYISI];
     short unsigned int kelime_length = strlen(secilen_kelime);
     char gozuken_kelime[kelime_length+2] = {};
-    int hak_sayisi = kelime_length/2 - 1, yardim_sirasi = 0, dogru_kelime_sayisi = 0;
+    int hak_sayisi = kelime_length/2 - 1, dogru_kelime_sayisi = 0;
     for(int i = 0; i < kelime_length; i++ ) gozuken_kelime[i] = '_';
 
     do
     {
         yazdir_kutu(yanlis_sayisi);
         printf("Kelime %d Harfli! : %s\n",kelime_length,gozuken_kelime);
+        printf("Tahmin Edilen Kelimeler: ");
+        for (int i = 0; i < tahmin_edilen_kelime_sayisi; i++)
+        {
+            printf("%c, ",tahmin_edilen_kelimeler[i]);
+        }
+        
         printf("\nipucu istiyorsan '*' tusuna bas! (Kalan ipucu hakkin : %d)\nYada Kelime Tahmin Et!\n--> ",hak_sayisi);
         scanf("%c",&girdi);
         if(girdi == '*'){
             if(hak_sayisi > 0)
             {
                 hak_sayisi--;
-                gozuken_kelime[yardim_sirasi] = secilen_kelime[yardim_sirasi];
-                yardim_sirasi++;
+                for (int i = 0; i < kelime_length; i++)
+                {
+                    if(gozuken_kelime[i] == '_'){
+                        gozuken_kelime[i] = secilen_kelime[i];
+                        dogru_kelime_sayisi++;
+                        if(dogru_kelime_sayisi == kelime_length){
+                            win_rate = 1;
+                            game_finish = 1;
+                        }
+                        break;
+                    }
+                }
+                
             }
             else{
                 printf("\nHarf hakkiniz kalmadi");
@@ -91,28 +110,45 @@ int main()
             }
         }
         else if(girdi >= 'a' && girdi <= 'z'){
-            bool bayrak = 0;
-            for (int i = 0; i < kelime_length; i++)
-            {
-                if(girdi == secilen_kelime[i]){
-                    bayrak = 1;
-                    dogru_kelime_sayisi++;
-                    if (dogru_kelime_sayisi == kelime_length)
-                    {
-                        game_finish = 1;
-                        win_rate = 1;
+            int ayni_olma_durumu = 0;
+            for(int i = 0;i < tahmin_edilen_kelime_sayisi;i++){
+                if (girdi == tahmin_edilen_kelimeler[i])
+                {
+                    ayni_olma_durumu = 1;
+                    break;
+                }
+            }
+            if(ayni_olma_durumu == 0){
+                bool bayrak = 0;
+                tahmin_edilen_kelimeler[tahmin_edilen_kelime_sayisi] = girdi;
+                tahmin_edilen_kelime_sayisi++;
+                for (int i = 0; i < kelime_length; i++)
+                {
+                    if(girdi == secilen_kelime[i]){
+                        bayrak = 1;
+                        dogru_kelime_sayisi++;
+                        if (dogru_kelime_sayisi == kelime_length)
+                        {
+                            game_finish = 1;
+                            win_rate = 1;
+                        }
+                        
+                        gozuken_kelime[i] = secilen_kelime[i];
                     }
-                    
-                    gozuken_kelime[i] = secilen_kelime[i];
+                }
+                if (bayrak == 0){
+                    yanlis_sayisi++;
+                    if(yanlis_sayisi == 9){
+                        game_finish = 1;
+                        win_rate = 0;
+                    }
                 }
             }
-            if (bayrak == 0){
-                yanlis_sayisi++;
-                if(yanlis_sayisi == 9){
-                    game_finish = 1;
-                    win_rate = 0;
-                }
+            else{
+                printf("\nharf zaten tahmin edilmis");
+                sleep(1);
             }
+
         }
         fflush(stdin);
 
@@ -130,9 +166,8 @@ int main()
             "                                      \n "
             "                                      \n "
             "                                      \n "
-
-            
             );
+        sleep(5);
     }
     else{
         printf("\033[2J");
@@ -144,10 +179,9 @@ int main()
             "             KAZANDINIZ               \n"
             "                                      \n "
             "                                      \n "
-            "                                      \n "
-
-            
+            "                                      \n "  
             );
+        sleep(5);
     }
     
 }
