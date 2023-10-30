@@ -4,10 +4,11 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
-#define KELIME_SAYISI 4
+#define KELIME_SAYISI 34
+
 int rand_sayi(){
     srand(time(NULL));
-    return rand() % 100;    
+    return (rand() % 100);    
 }
 void yazdir_aski(){
     printf("\033[2;0H");
@@ -66,7 +67,7 @@ int main()
     bool game_finish = 0,win_rate = -1;
     int tahmin_edilen_kelime_sayisi = 0;
     char tahmin_edilen_kelimeler[30];
-    char kelimeler[KELIME_SAYISI][25] = {"elma","kalem","elektrik","telefon"},girdi,yanlis_sayisi = 0;
+    char kelimeler[KELIME_SAYISI][25] = {"elma","kalem","elektrik","telefon","almanya", "kahve", "bilgisayar","kutu", "televizyon", "hamburger", "tatil", "cep telefonu", "basketbol", "siyah", "piano", "masa", "kalem", "defter", "gitar", "futbol", "kolye", "makarna", "tavuk", "ayna", "bisiklet", "kumanda", "sandalye", "elbise", "boya", "yapboz", "dondurma", "kemer", "kamera", "saat"},girdi,yanlis_sayisi = 0;
     char *secilen_kelime = kelimeler[rand_sayi() % KELIME_SAYISI];
     short unsigned int kelime_length = strlen(secilen_kelime);
     char gozuken_kelime[kelime_length+2] = {};
