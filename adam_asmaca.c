@@ -78,13 +78,13 @@ int main()
     {
         yazdir_kutu(yanlis_sayisi);
         printf("Kelime %d Harfli! : %s\n",kelime_length,gozuken_kelime);
-        printf("Tahmin Edilen Kelimeler: ");
+        printf("Tahmin Edilen Harfler: ");
         for (int i = 0; i < tahmin_edilen_kelime_sayisi; i++)
         {
             printf("%c, ",tahmin_edilen_kelimeler[i]);
         }
-        
-        printf("\nipucu istiyorsan '*' tusuna bas! (Kalan ipucu hakkin : %d)\nYada Kelime Tahmin Et!\n--> ",hak_sayisi);
+        //printf("\ntahmin edilen kelime sayisi = %d\ndogru kelime sayisi = %d\nyanlis sayisi = %d",tahmin_edilen_kelime_sayisi,dogru_kelime_sayisi,yanlis_sayisi);
+        printf("\nipucu istiyorsan '*' tusuna bas! (Kalan ipucu hakkin : %d)\nYa da Kelime Tahmin Et!\n--> ",hak_sayisi);
         scanf("%c",&girdi);
         if(girdi == '*'){
             if(hak_sayisi > 0)
@@ -94,7 +94,16 @@ int main()
                 {
                     if(gozuken_kelime[i] == '_'){
                         gozuken_kelime[i] = secilen_kelime[i];
-                        dogru_kelime_sayisi++;
+                        for (int j = 0; j < kelime_length; j++)
+                        {
+                            if(gozuken_kelime[i] == secilen_kelime[j]){
+                                gozuken_kelime[j] = secilen_kelime[i];
+                                dogru_kelime_sayisi++;
+                            }
+                        }
+                        
+                        tahmin_edilen_kelimeler[tahmin_edilen_kelime_sayisi] = gozuken_kelime[i];
+                        tahmin_edilen_kelime_sayisi++;
                         if(dogru_kelime_sayisi == kelime_length){
                             win_rate = 1;
                             game_finish = 1;
@@ -139,7 +148,7 @@ int main()
                 }
                 if (bayrak == 0){
                     yanlis_sayisi++;
-                    if(yanlis_sayisi == 9){
+                    if(yanlis_sayisi == 8){
                         game_finish = 1;
                         win_rate = 0;
                     }
