@@ -65,13 +65,14 @@ void yazdir_kutu(char yanlis_sayisi){
 int main()
 {
     bool game_finish = 0,win_rate = -1;
-    int tahmin_edilen_kelime_sayisi = 0;
+    int tahmin_edilen_harf_sayisi = 0;
     char tahmin_edilen_kelimeler[30];
-    char kelimeler[KELIME_SAYISI][25] = {"elma","kalem","elektrik","telefon","almanya", "kahve", "bilgisayar","kutu", "televizyon", "hamburger", "tatil", "cep telefonu", "basketbol", "siyah", "piano", "masa", "kalem", "defter", "gitar", "futbol", "kolye", "makarna", "tavuk", "ayna", "bisiklet", "kumanda", "sandalye", "elbise", "boya", "yapboz", "dondurma", "kemer", "kamera", "saat"},girdi,yanlis_sayisi = 0;
+    char kelimeler[KELIME_SAYISI][25] = {"elma","kalem","elektrik","telefon","almanya", "kahve", "bilgisayar","kutu", "televizyon", "hamburger", "tatil", "telefon", "basketbol", "siyah", "piano", "masa", "kalem", "defter", "gitar", "futbol", "kolye", "makarna", "tavuk", "ayna", "bisiklet", "kumanda", "sandalye", "elbise", "boya", "yapboz", "dondurma", "kemer", "kamera", "saat"};
+    char girdi,yanlis_sayisi = 0;
     char *secilen_kelime = kelimeler[rand_sayi() % KELIME_SAYISI];
     short unsigned int kelime_length = strlen(secilen_kelime);
     char gozuken_kelime[kelime_length+2] = {};
-    int hak_sayisi = kelime_length/2 - 1, dogru_kelime_sayisi = 0;
+    int hak_sayisi = kelime_length > 7 ? 2 : 1,dogru_kelime_sayisi = 0;
     for(int i = 0; i < kelime_length; i++ ) gozuken_kelime[i] = '_';
 
     do
@@ -79,12 +80,12 @@ int main()
         yazdir_kutu(yanlis_sayisi);
         printf("Kelime %d Harfli! : %s\n",kelime_length,gozuken_kelime);
         printf("Tahmin Edilen Harfler: ");
-        for (int i = 0; i < tahmin_edilen_kelime_sayisi; i++)
+        for (int i = 0; i < tahmin_edilen_harf_sayisi; i++)
         {
             printf("%c, ",tahmin_edilen_kelimeler[i]);
         }
-        //printf("\ntahmin edilen kelime sayisi = %d\ndogru kelime sayisi = %d\nyanlis sayisi = %d",tahmin_edilen_kelime_sayisi,dogru_kelime_sayisi,yanlis_sayisi);
-        printf("\nipucu istiyorsan '*' tusuna bas! (Kalan ipucu hakkin : %d)\nYa da Kelime Tahmin Et!\n--> ",hak_sayisi);
+        //printf("\ntahmin edilen kelime sayisi = %d\ndogru kelime sayisi = %d\nyanlis sayisi = %d",tahmin_edilen_harf_sayisi,dogru_kelime_sayisi,yanlis_sayisi);
+        printf("\nipucu istiyorsan '*' tusuna bas! (Kalan ipucu hakkin : %d)\nYa da Harf Tahmin Et!\n--> ",hak_sayisi);
         scanf("%c",&girdi);
         if(girdi == '*'){
             if(hak_sayisi > 0)
@@ -102,8 +103,8 @@ int main()
                             }
                         }
                         
-                        tahmin_edilen_kelimeler[tahmin_edilen_kelime_sayisi] = gozuken_kelime[i];
-                        tahmin_edilen_kelime_sayisi++;
+                        tahmin_edilen_kelimeler[tahmin_edilen_harf_sayisi] = gozuken_kelime[i];
+                        tahmin_edilen_harf_sayisi++;
                         if(dogru_kelime_sayisi == kelime_length){
                             win_rate = 1;
                             game_finish = 1;
@@ -121,7 +122,7 @@ int main()
         }
         else if(girdi >= 'a' && girdi <= 'z'){
             int ayni_olma_durumu = 0;
-            for(int i = 0;i < tahmin_edilen_kelime_sayisi;i++){
+            for(int i = 0;i < tahmin_edilen_harf_sayisi;i++){
                 if (girdi == tahmin_edilen_kelimeler[i])
                 {
                     ayni_olma_durumu = 1;
@@ -130,8 +131,8 @@ int main()
             }
             if(ayni_olma_durumu == 0){
                 bool bayrak = 0;
-                tahmin_edilen_kelimeler[tahmin_edilen_kelime_sayisi] = girdi;
-                tahmin_edilen_kelime_sayisi++;
+                tahmin_edilen_kelimeler[tahmin_edilen_harf_sayisi] = girdi;
+                tahmin_edilen_harf_sayisi++;
                 for (int i = 0; i < kelime_length; i++)
                 {
                     if(girdi == secilen_kelime[i]){
@@ -169,14 +170,14 @@ int main()
         printf("\033[2J");
         printf("\033[0;0H");
         printf(
-            "                                      \n "
             "                                       \n"
-            "                                      \n "
+            "                                       \n"
+            "                                       \n"
             "             KAYBETTINIZ               \n"
-            "                                      \n "
-            "                                      \n "
-            "                                      \n "
-            );
+            "                                       \n"
+            "            CEVAP: %s                  \n"
+            "                                       \n"
+            ,secilen_kelime);
         sleep(5);
     }
     else{
